@@ -10,7 +10,7 @@
         {{ movie.original_title }} ({{ movie.release_date }})
       </div>
       <span class="movie-overview">{{ movie.overview }}</span>
-      <div class="movie-buttons">
+      <div class="movie-buttons" v-if="!isSearch">
         <button
           class="btn movie-buttons-watched"
           @click="movieStore.toggleWatched(movie.id)"
@@ -25,19 +25,34 @@
           Delete
         </button>
       </div>
+      <div class="movie-buttons" v-else>
+        <button
+          @click="searchStore.addToUserMovies(movie)"
+          class="btn btn_green"
+        >
+          Add
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import {useMovieStore} from '../stores/MovieStore';
+import {useSearchStore} from '../stores/SearchStore';
 
+const searchStore = useSearchStore();
 const movieStore = useMovieStore();
 const props = defineProps({
   movie: {
     type: Object,
     require: true,
     default: () => {},
+  },
+  isSearch: {
+    type: Boolean,
+    require: false,
+    default: false,
   },
 });
 </script>
